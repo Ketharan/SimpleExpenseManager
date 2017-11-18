@@ -17,7 +17,9 @@
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.ui;
 
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,7 @@ import static lk.ac.mrt.cse.dbs.simpleexpensemanager.Constants.EXPENSE_MANAGER;
 public class ExpenseLogsFragment extends Fragment {
     private ExpenseManager currentExpenseManager;
 
+
     public static ExpenseLogsFragment newInstance(ExpenseManager expenseManager) {
         ExpenseLogsFragment expenseLogsFragment = new ExpenseLogsFragment();
         Bundle args = new Bundle();
@@ -61,6 +64,10 @@ public class ExpenseLogsFragment extends Fragment {
         List<Transaction> transactionList = new ArrayList<>();
         if (currentExpenseManager != null) {
             transactionList = currentExpenseManager.getTransactionLogs();
+            Log.d("emanagerCreated","success");
+            if (transactionList.isEmpty()) {
+                Log.d("emanagerCreated", "list not empty");
+            }
         }
         generateTransactionsTable(rootView, logsTableLayout, transactionList);
         return rootView;

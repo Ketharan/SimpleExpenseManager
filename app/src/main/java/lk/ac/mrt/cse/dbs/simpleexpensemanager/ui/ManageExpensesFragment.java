@@ -17,6 +17,7 @@
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -30,9 +31,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.R;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.ExpenseManager;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.AndroidDatabaseManager;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.exception.InvalidAccountException;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.ExpenseType;
 
@@ -64,6 +67,19 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
         View rootView = inflater.inflate(R.layout.fragment_manage_expenses, container, false);
         submitButton = (Button) rootView.findViewById(R.id.submit_amount);
         submitButton.setOnClickListener(this);
+
+        TextView tv =(TextView)rootView.findViewById(R.id.amount_text_tv);
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent dbmanager = new Intent(getContext(),AndroidDatabaseManager.class);
+                startActivity(dbmanager);
+            }
+        });
+
+
+
 
         amount = (EditText) rootView.findViewById(R.id.amount);
         accountSelector = (Spinner) rootView.findViewById(R.id.account_selector);
