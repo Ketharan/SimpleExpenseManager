@@ -166,20 +166,7 @@ public class PersistentMemoryAccountDAO extends SQLiteOpenHelper implements Acco
 
     @Override
     public void updateBalance(String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException {
-//        if (!accounts.containsKey(accountNo)) {
-//            String msg = "Account " + accountNo + " is invalid.";
-//            throw new InvalidAccountException(msg);
-//        }
-//        Account account = accounts.get(accountNo);
-//        // specific implementation based on the transaction type
-//        switch (expenseType) {
-//            case EXPENSE:
-//                account.setBalance(account.getBalance() - amount);
-//                break;
-//            case INCOME:
-//                account.setBalance(account.getBalance() + amount);
-//                break;
-//        }
-//        accounts.put(accountNo, account);
+        //this method dont have to be implemented to the given requirement
+        //no way for the current ui to capture these information
     }
 }

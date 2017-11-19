@@ -40,8 +40,7 @@ public class InMemoryDemoExpenseManager extends ExpenseManager {
     public void setup() {
         /*** Begin generating dummy data for In-Memory implementation ***/
 
-//        TransactionDAO inMemoryTransactionDAO = new InMemoryTransactionDAO();
-//        setTransactionsDAO(inMemoryTransactionDAO);
+
 
         TransactionDAO ptransDAO = new PersistantMemoryTransactionDAO(MainActivity.getContext());
         setTransactionsDAO(ptransDAO);

@@ -48,7 +48,8 @@ public class PersistantMemoryTransactionDAO extends SQLiteOpenHelper implements 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // TODO Auto-generated method stub
-
+        //table creation has been done with the other sqliteopenhelper extension as i get some
+        //errors while implemnting the creation process here
 
     }
 
@@ -73,11 +74,11 @@ public class PersistantMemoryTransactionDAO extends SQLiteOpenHelper implements 
         Double amounts = transaction.getAmount();
 
         Calendar c = Calendar.getInstance();
-        //System.out.println("Current time => " + c.getTime());
+
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c.getTime());
-        Log.d("Date",formattedDate);
+        //Log.d("Date",formattedDate);
         byte[] timeStamp = formattedDate.getBytes();
 
 
@@ -95,7 +96,7 @@ public class PersistantMemoryTransactionDAO extends SQLiteOpenHelper implements 
     @Override
     public List<Transaction> getAllTransactionLogs() {
         transactions.clear();
-        Log.d("creation","starting");
+        //Log.d("creation","starting");
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( " select * from tbltrans", null );
 
@@ -139,12 +140,47 @@ public class PersistantMemoryTransactionDAO extends SQLiteOpenHelper implements 
 
     @Override
     public List<Transaction> getPaginatedTransactionLogs(int limit) {
-        int size = transactions.size();
-        if (size <= limit) {
-            return transactions;
+        transactions.clear();
+        Log.d("creation","starting");
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( " select * from tbltrans LIMIT limit", null );
+
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false){
+
+            String accountNo = res.getString(res.getColumnIndex(EXPENSE_COLUMN_NO));
+            Double amount = res.getDouble(res.getColumnIndex(EXPENSE_COLUMN_AMOUNT));
+            String transType = res.getString(res.getColumnIndex(EXPENSE_COLUMN_TYPE));
+
+            ExpenseType type = ExpenseType.valueOf(transType);
+            byte[] date = res.getBlob(res.getColumnIndex(EXPENSE_COLUMN_DATE));
+
+
+            String str = new String(date, StandardCharsets.UTF_8);
+            Log.d("loadedDate",str);
+
+            Date finalDate;
+            try {
+
+
+                SimpleDateFormat inputFormat = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss 'GMT'z", Locale.ENGLISH);
+                finalDate = inputFormat.parse(str);
+                transactions.add(new Transaction(finalDate,accountNo,type,amount));
+                Log.d("creation","success");
+            }catch (java.text.ParseException e){
+                Log.d("creation","failed");
+                Calendar cal = Calendar.getInstance();
+
+                finalDate = cal.getTime();
+                transactions.add(new Transaction(finalDate,accountNo,type,amount));
+
+            }
+
+
+            res.moveToNext();
         }
-        // return the last <code>limit</code> number of transaction logs
-        return transactions.subList(size - limit, size);
+        return transactions;
     }
 
 
